@@ -1,21 +1,21 @@
-#ifndef NSw7SegmentDisplay_H
-#define NSw7SegmentDisplay_H
+#ifndef NSW7SEGMENTDISPLAY_H
+#define NSW7SEGMENTDISPLAY_H
 
 #include <Arduino.h>
-#include "NswPort.h"  // Include NswPort header
+#include <TM1637Display.h>
+#include "NswPort.h"  // Include the port mapping
 
 class Nsw7SegmentDisplay {
-  public:
-    // Constructor with port selection
-    Nsw7SegmentDisplay(Port port);
+public:
+    Nsw7SegmentDisplay(Port port); // Constructor using Port enum
 
-    // Display methods for different types of values
-    void display(uint16_t value);
-    void display(int16_t value);
-    void display(float value);
+    void setBrightness(uint8_t brightness);
+    void displayNumber(int number);
+    void displayDecimal(uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4);
+    void clear();
 
-  private:
-    NswPort _port;  // Port configuration
+private:
+    TM1637Display display;
 };
 
-#endif
+#endif // NSW7SEGMENTDISPLAY_H

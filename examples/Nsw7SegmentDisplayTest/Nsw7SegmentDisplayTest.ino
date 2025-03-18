@@ -1,14 +1,19 @@
 #include <Nsw7SegmentDisplay.h>
 
-Nsw7SegmentDisplay display(PORT_1); // Create display object using PORT_1
+
+Nsw7SegmentDisplay display(PORT_4);
 
 void setup() {
-  // Display different types of values
-  display.display(12345);      // Display uint16_t
-  display.display(-12345);     // Display int16_t
-  display.display(12.34f);     // Display float
+    display.setBrightness(7);
 }
 
 void loop() {
-  // You can add any looping functionality here if needed
+    display.displayNumber(1111);
+    delay(2000);
+    
+    display.displayDecimal(1, 1, 1, 1);
+    delay(2000);
+    
+    display.clear();
+    delay(1000);
 }

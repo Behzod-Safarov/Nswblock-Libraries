@@ -1,25 +1,33 @@
 #include "Nsw7SegmentDisplay.h"
 
-// Constructor with port parameter
-Nsw7SegmentDisplay::Nsw7SegmentDisplay(Port port) : _port(port) {
-  // You don't need to set the number of digits here since it's managed internally.
-  Serial.begin(9600);  // Initialize serial communication (for debugging)
+// Constructor: Initialize display with Port enum
+Nsw7SegmentDisplay::Nsw7SegmentDisplay(Port port)
+    : display(NswPort(port).pin2, NswPort(port).pin1) {  // Use pin1 as CLK, pin2 as DIO
+    display.setBrightness(7);
 }
 
-// Method to display uint16_t value
-void Nsw7SegmentDisplay::display(uint16_t value) {
-  Serial.print("Displaying uint16_t: ");
-  Serial.println(value);
+// Set brightness
+void Nsw7SegmentDisplay::setBrightness(uint8_t brightness) {
+    display.setBrightness(brightness);
 }
 
-// Method to display int16_t value
-void Nsw7SegmentDisplay::display(int16_t value) {
-  Serial.print("Displaying int16_t: ");
-  Serial.println(value);
+// Display a number
+void Nsw7SegmentDisplay::displayNumber(int number) {
+    display.showNumberDec(number, false);
 }
 
-// Method to display float value
-void Nsw7SegmentDisplay::display(float value) {
-  Serial.print("Displaying float: ");
-  Serial.println(value, 2);  // Print float with 2 decimal places
+// Display digits with decimal points
+void Nsw7SegmentDisplay::displayDecimal(uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4) {
+    uint8_t digits[] = {
+        display.encodeDigit(d1) | 0x80, // First digit with DP
+        display.encodeDigit(d2) | 0x80, // Second digit with DP
+        display.encodeDigit(d3) | 0x80, // Third digit with DP
+        display.encodeDigit(d4)         // Last digit without DP
+    };
+    display.setSegments(digits);
+}
+
+// Clear display
+void Nsw7SegmentDisplay::clear() {
+    display.clear();
 }
