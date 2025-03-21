@@ -1,24 +1,24 @@
-#include <NswFourButton.h>
+#include <NswFourButton.h>  // NswBlock uchun 4-tugmali modul kutubxonasi chaqirilmoqda
 
-// Create an instance of the 4-button module, connected to PORT_3 (A2, A3)
+// 📌 To‘rtta tugmali modulni yaratamiz va PORT_3 ga ulaymiz (PORT_3 = A2, A3)
 NswFourButton buttons(PORT_3);
 
 void setup() {
-    Serial.begin(115200);  // Start the serial monitor at 115200 baud rate
-    Serial.println("4-Button Module Test Started...");
-    Serial.println("Press any button to see the output.");
+    Serial.begin(115200);  // 📌 Seriyali monitorni 115200 baud tezlikda ishga tushiramiz
+    Serial.println("4-Tugmali modul test boshlandi...");  
+    Serial.println("Tugmalardan birini bosing, natijani ko‘rish mumkin.");
 }
 
 void loop() {
-    uint8_t button = buttons.getPressedButton();  // Read which button is pressed
+    uint8_t button = buttons.getPressedButton();  // 📌 Qaysi tugma bosilganligini tekshiramiz
 
-    if (button > 0) {
-        Serial.print("Button ");
-        Serial.print(button);
-        Serial.println(" is Pressed!");
+    if (button > 0) {  // Agar biror tugma bosilgan bo‘lsa
+        Serial.print("Tugma ");
+        Serial.print(button);  // 📌 Bosilgan tugma raqamini chiqaramiz
+        Serial.println(" bosildi!");
     } else {
-        Serial.println("No button pressed...");
+        Serial.println("Hech qaysi tugma bosilmadi...");  // 📌 Agar tugma bosilmagan bo‘lsa
     }
 
-    delay(300);  // Add a small delay to make the output readable
+    delay(300);  // 📌 300 ms kechikish qo‘shamiz, natijani o‘qish oson bo‘lishi uchun
 }

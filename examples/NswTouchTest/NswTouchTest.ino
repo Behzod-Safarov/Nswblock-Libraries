@@ -1,15 +1,15 @@
 #include <NswTouchSensor.h>
 
-// Initialize touch sensor on PORT_4
-NswTouchSensor touchSensor(PORT_4);
+// 📌 Sensorni PORT_4 ga uladik
+NswTouchSensor tegishSensori(PORT_4);
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(9600); // 📌 Serial monitorni ishga tushiramiz
 }
 
 void loop() {
-    if (touchSensor.isTouched()) {
-        Serial.println("Touch detected!");
+    if (tegishSensori.isTouched()) { // 📌 Agar sensorga tegilgan bo'lsa
+        Serial.println("Tegish aniqlandi!"); // 📌 Xabar chiqarish
     }
-    delay(100);
+    delay(100); // ⏳ 100 ms kutish
 }

@@ -1,22 +1,23 @@
 #include <NswUltrasonic.h>
 
-NswUltrasonic ultrasonic(PORT_1);  // Using PORT_6 (TXD, RXD)
+// 📌 Ultrasonik sensorni PORT_1 ga ulaymiz
+NswUltrasonic ultratovush(PORT_1);  
 
 void setup() {
     Serial.begin(115200);  
-    Serial.println("Ultrasonic Sensor Test Started...");
+    Serial.println("🔎 Ultrasonik sensor testi boshlandi...");
 }
 
 void loop() {
-    float distance = ultrasonic.getDistance();
+    float masofa = ultratovush.getDistance(); // 📌 Masofani o'lchash
 
-    if (distance >= 0) {  
-        Serial.print("Received Distance: ");
-        Serial.print(distance);
+    if (masofa >= 0) {  
+        Serial.print("📏 Masofa: ");
+        Serial.print(masofa);
         Serial.println(" cm");
     } else {
-        Serial.println("No data received...");
+        Serial.println("⚠️ Ma'lumot olinmadi...");
     }
 
-    delay(100);
+    delay(100); // ⏳ 0.1 soniya kutish
 }

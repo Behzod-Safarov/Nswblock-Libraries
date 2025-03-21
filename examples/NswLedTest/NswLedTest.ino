@@ -1,21 +1,21 @@
 #include <NswLed.h>
 
-// Initialize LED on PORT_4
+// 📌 LEDni PORT_4 ga ulaymiz (pin 8, 9)
 NswLed led(PORT_4);
 
 void setup() {
-    // Nothing needed here
+    // 📌 setup() bo‘limida hech qanday sozlama talab qilinmaydi.
 }
 
 void loop() {
-    led.on();
-    delay(1000);
+    led.on();    // 📌 LEDni yoqish
+    delay(1000); // ⏳ 1 soniya kutish
     
-    led.off();
-    delay(1000);
+    led.off();   // 📌 LEDni o‘chirish
+    delay(1000); // ⏳ 1 soniya kutish
     
-    led.toggle();
-    delay(1000);
+    led.toggle(); // 📌 LEDni hozirgi holatiga qarab yoqish yoki o‘chirish
+    delay(1000);  // ⏳ 1 soniya kutish
     
-    led.blink(500);
+    led.blink(500); // 📌 LEDni har 500ms da miltillatish
 }

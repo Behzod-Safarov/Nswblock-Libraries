@@ -1,15 +1,16 @@
 #include <NswSevenSegmentDisplay.h>
 
-NswSevenSegmentDisplay display(PORT_5);  // Example: Using PORT_5 (6, 7)
+// 📌 7 segmentli displeyni PORT_5 ga ulaymiz (pinlar: 6, 7)
+NswSevenSegmentDisplay displey(PORT_5);
 
 void setup() {
-    Serial.begin(115200);
-    display.displayNumber(1234);
+    Serial.begin(115200); // 📌 Serial monitorni ishga tushirish
+    displey.displayNumber(1234); // 📌 Boshlang'ich sonni chiqarish
 }
 
 void loop() {
-    for (int i = 0; i <= 9999; i++) {
-        display.displayNumber(i);
-        delay(500);
+    for (int son = 0; son <= 9999; son++) { // 📌 0 dan 9999 gacha sanash
+        displey.displayNumber(son); // 📌 Raqamni displeyga chiqarish
+        delay(500); // ⏳ 0.5 soniya kutish
     }
 }

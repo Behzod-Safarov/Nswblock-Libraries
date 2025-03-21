@@ -1,14 +1,15 @@
 #include <NswPotentiometer.h>
 
-NswPotentiometer potentiometer(PORT_2);  // PORT_2 = A0, A1
+// 📌 Potensiometrni PORT_2 ga ulaymiz (A0, A1)
+NswPotentiometer potensiometr(PORT_2);
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(115200); // 📌 Serial monitorni ishga tushiramiz
 }
 
 void loop() {
-    int value = potentiometer.read();
-    Serial.print("Potentiometer Value: ");
-    Serial.println(value);
-    delay(500);
+    int qiymat = potensiometr.read(); // 📌 Potensiometr qiymatini o'qish
+    Serial.print("Potensiometr qiymati: ");
+    Serial.println(qiymat); // 📌 Natijani chiqarish
+    delay(500); // ⏳ 0.5 soniya kutish
 }

@@ -1,6 +1,6 @@
 #include "NswHumitureSensor.h"
 
-NswHumitureSensor::NswHumitureSensor(Port port) : _port(port), _dht(_port.pin1, DHTTYPE) {
+NswHumitureSensor::NswHumitureSensor(Port port) : _port(port), _dht(_port.pin2, DHTTYPE) {
     _dht.begin();  // Initialize the DHT sensor
 }
 
