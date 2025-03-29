@@ -19,4 +19,7 @@ void loop() {
 
     ledMx.showNum(1.23);  // 📌 LED ekranda 1.23 sonini chiqaramiz
     delay(2000);  // 2 soniya kutamiz
+
+    ledMx.fillScreen();
+    delay(2000);
 }

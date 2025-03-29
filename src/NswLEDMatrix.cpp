@@ -504,6 +504,15 @@
      writeBytesToAddress(0, u8_Display_Buffer, LED_BUFFER_SIZE);
  }
  
+    void NswLEDMatrix::fillScreen()
+    {
+        for(uint8_t i = 0; i < LED_BUFFER_SIZE; i++)
+        {
+            u8_Display_Buffer[i] = 0xFF;  // Set all 16 columns to all LEDs on
+        }
+        writeBytesToAddress(0, u8_Display_Buffer, LED_BUFFER_SIZE);  // Write to matrix
+    }
+
  void NswLEDMatrix::showNum(float value, uint8_t digits)
  {
  Posotion_1:

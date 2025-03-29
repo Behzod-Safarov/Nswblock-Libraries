@@ -53,7 +53,7 @@
      void showClock(uint8_t hour, uint8_t minute, bool point_flag = PointOn);
      void showNum(float value, uint8_t digits = 3);
      void reset(Port port);
- 
+     void fillScreen();
  private:
      NswPort* port;
      uint8_t u8_SCKPin;
