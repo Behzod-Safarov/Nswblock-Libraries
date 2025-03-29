@@ -1,21 +1,45 @@
-#include <NswRgbLed.h>
+#include "NswRGBLed.h"
 
-// 📌 RGB LED'larni boshqarish uchun obyekt yaratamiz
-NswRgbLed rgbLed(PORT_4);  // LED'lar PORT_4 (pin 8, 9) ga ulangan
+// PORT_4 (pin2=9) bilan 4 ta LED ishlatamiz (avtomatik)
+NswRGBLed led(PORT_4);  // LED soni kiritish shart emas
 
 void setup() {
-    rgbLed.begin(4);  // 📌 4 ta LED ishlatish uchun sozlash
+    led.begin();  // LEDlarni ishga tushiramiz
+    
+    // Har bir LEDni birma-bir sinab ko'ramiz
+    led.clear();
+    led.setColor(0, 255, 0, 0);  // 1-LED qizil
+    led.setColor(1, 0, 255, 0);  // 2-LED yashil
+    led.setColor(2, 0, 0, 255);  // 3-LED ko'k
+    led.setColor(3, 255, 255, 0);  // 4-LED sariq
+    led.show();
+    delay(2000);  // 2 soniya kutamiz
 }
 
 void loop() {
-    // 📌 Har bir LED'ga rang berish (R, G, B)
-    rgbLed.setColor(0, 255, 0, 0);   // LED 1 - Qizil
-    rgbLed.setColor(1, 0, 255, 0);   // LED 2 - Yashil
-    rgbLed.setColor(2, 0, 0, 255);   // LED 3 - Ko‘k
-    rgbLed.setColor(3, 255, 255, 0); // LED 4 - Sariq
-    rgbLed.show(); // 📌 LED'larni yoqish
-    delay(1000); // ⏳ 1 soniya kutish
-
-    rgbLed.clear(); // 📌 LED'larni o‘chirish
-    delay(1000); // ⏳ 1 soniya kutish
+    // Har bir LEDni navbat bilan yoqamiz
+    led.clear();
+    led.setColor(0, 255, 0, 0);  // Faqat 1-LED qizil
+    led.show();
+    delay(1000);
+    
+    led.clear();
+    led.setColor(1, 0, 255, 0);  // Faqat 2-LED yashil
+    led.show();
+    delay(1000);
+    
+    led.clear();
+    led.setColor(2, 0, 0, 255);  // Faqat 3-LED ko'k
+    led.show();
+    delay(1000);
+    
+    led.clear();
+    led.setColor(3, 255, 255, 0);  // Faqat 4-LED sariq
+    led.show();
+    delay(1000);
+    
+    // Hamma LEDlarni oq qilamiz
+    led.setColor(255, 255, 255);  // Oq rang
+    led.show();
+    delay(2000);
 }
