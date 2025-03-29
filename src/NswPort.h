@@ -28,8 +28,8 @@ public:
             case PORT_6: pin1 = 0; pin2 = 1; break; // TXD, RXD
             case PORT_7: pin1 = 4; pin2 = 5; break;
         }
-        sclPin = pin1;
-        sdaPin = pin2;
+        sclPin = pin2;
+        sdaPin = pin1;
     }
 };
 

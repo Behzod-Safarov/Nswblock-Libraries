@@ -2,7 +2,7 @@
 #define NSWBLOCK_SERVO_H
 
 #include <Arduino.h>
-#include <Servo.h>
+#include <utility/Servo.h>
 #include "NswPort.h"
 
 class NswServo {

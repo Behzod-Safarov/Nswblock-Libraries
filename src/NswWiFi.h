@@ -2,7 +2,7 @@
 #define NSW_WIFI_H
 
 #include <Arduino.h>
-#include <SoftwareSerial.h>
+#include <utility/SoftwareSerial.h>
 #include "NswPort.h"
 
 class NswWiFi : public SoftwareSerial {
