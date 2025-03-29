@@ -28,8 +28,6 @@ public:
             case PORT_6: pin1 = 0; pin2 = 1; break; // TXD, RXD
             case PORT_7: pin1 = 4; pin2 = 5; break;
         }
-
-        // Assign I2C pins (assume SDA=SCL for all ports)
         sclPin = pin1;
         sdaPin = pin2;
     }
