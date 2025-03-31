@@ -2,9 +2,7 @@
 #define NSW_HUMITURE_SENSOR_H
 
 #include "NswPort.h"
-#include <Arduino.h>
-#include <DHT.h>  // Adafruit DHT library
-
+#include <utility/Dht/DHT.h>  // Adafruit DHT library
 #define DHTTYPE DHT11  // Specify DHT sensor type
 
 class NswHumitureSensor {
