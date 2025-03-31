@@ -406,7 +406,9 @@ void NswOledDisplay::sendData(const uint8_t* data, uint16_t len) {
 
 void NswOledDisplay::drawChar(uint8_t x, uint8_t y, char c, bool color) {
     if (c < 32 || c > 122) c = 32; // Limit to defined range (space to 'z')
-    uint16_t charIndex = (c - 32) * _fontWidth; // Index into font array
+    uint16_t charIndex = (c - 32) * _fontWidth;
+    // Adjust for lowercase shift (temporary fix to test)
+    if (c >= 'a' && c <= 'z') charIndex -= _fontWidth; // Shift back by 1 character
     for (uint8_t i = 0; i < _fontWidth; i++) {
         uint8_t col = pgm_read_byte(&_font[charIndex + i]);
         for (uint8_t j = 0; j < _fontHeight; j++) {
