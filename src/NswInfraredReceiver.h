@@ -2,7 +2,7 @@
 #define NSW_INFRARED_RECEIVER_H
 
 #include <Arduino.h>
-#include <utility/IRremote/IRremote.h>   // IR library (install via Arduino Library Manager)
+#include "utility/IRremote/IRremote.h"   // IR library (install via Arduino Library Manager)
 #include "NswPort.h"    // Include port mapping
 
 class NswInfraredReceiver {
