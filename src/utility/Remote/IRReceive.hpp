@@ -71,7 +71,7 @@ unsigned long sMicrosAtLastStopTimer = 0; // Used to adjust TickCounterForISR wi
 IRrecv::IRrecv() {
     decodedIRData.rawDataPtr = &irparams; // for decodePulseDistanceData() etc.
     setReceivePin(0);
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_RECEIVE_FEEDBACK_CODE)
     setLEDFeedback(0, DO_NOT_ENABLE_LED_FEEDBACK);
 #endif
 }
@@ -79,7 +79,7 @@ IRrecv::IRrecv() {
 IRrecv::IRrecv(uint_fast8_t aReceivePin) {
     decodedIRData.rawDataPtr = &irparams; // for decodePulseDistanceData() etc.
     setReceivePin(aReceivePin);
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_RECEIVE_FEEDBACK_CODE)
     setLEDFeedback(0, DO_NOT_ENABLE_LED_FEEDBACK);
 #endif
 }
@@ -92,7 +92,7 @@ IRrecv::IRrecv(uint_fast8_t aReceivePin) {
 IRrecv::IRrecv(uint_fast8_t aReceivePin, uint_fast8_t aFeedbackLEDPin) {
     decodedIRData.rawDataPtr = &irparams; // for decodePulseDistanceData() etc.
     setReceivePin(aReceivePin);
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_RECEIVE_FEEDBACK_CODE)
     setLEDFeedback(aFeedbackLEDPin, DO_NOT_ENABLE_LED_FEEDBACK);
 #else
     (void) aFeedbackLEDPin;
@@ -253,7 +253,7 @@ void IRReceiveTimerInterruptHandler() {
         }
     }
 
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_RECEIVE_FEEDBACK_CODE)
     if (FeedbackLEDControl.LedFeedbackEnabled & LED_FEEDBACK_ENABLED_FOR_RECEIVE) {
         setFeedbackLED(tIRInputLevel == INPUT_MARK);
     }
@@ -293,7 +293,7 @@ ISR()
 void IRrecv::begin(uint_fast8_t aReceivePin, bool aEnableLEDFeedback, uint_fast8_t aFeedbackLEDPin) {
 
     setReceivePin(aReceivePin);
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_RECEIVE_FEEDBACK_CODE)
     uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if (aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_RECEIVE;
@@ -1184,14 +1184,14 @@ bool IRrecv::checkHeader_P(PulseDistanceWidthProtocolConstants const *aProtocolC
 // Check header "mark" and "space"
     if (!matchMark(decodedIRData.rawDataPtr->rawbuf[1], pgm_read_word(&aProtocolConstantsPGM->DistanceWidthTimingInfo.HeaderMarkMicros))) {
 #if defined(LOCAL_TRACE)
-        Serial.print(::getProtocolString(aProtocolConstants->ProtocolIndex));
+        Serial.print(::getProtocolString(aProtocolConstantsPGM->ProtocolIndex));
         Serial.println(F(": Header mark length is wrong"));
 #endif
         return false;
     }
     if (!matchSpace(decodedIRData.rawDataPtr->rawbuf[2], pgm_read_word(&aProtocolConstantsPGM->DistanceWidthTimingInfo.HeaderSpaceMicros))) {
 #if defined(LOCAL_TRACE)
-        Serial.print(::getProtocolString(aProtocolConstants->ProtocolIndex));
+        Serial.print(::getProtocolString(aProtocolConstantsPGM->ProtocolIndex));
         Serial.println(F(": Header space length is wrong"));
 #endif
         return false;
@@ -1428,6 +1428,11 @@ void printActiveIRProtocols(Print *aSerial) {
  *                                    which in turn may block the proper detection of repeats.*
  * @return true, if CheckForRecordGapsMicros() has printed a message, i.e. gap < 15ms (RECORD_GAP_MICROS_WARNING_THRESHOLD).
  */
+bool IRrecv::printIRResultShort(Print *aSerial,  bool aPrintRepeatGap, bool aCheckForRecordGapsMicros) {
+    // DEPRECATED
+    (void) aPrintRepeatGap;
+    return printIRResultShort(aSerial, aCheckForRecordGapsMicros);
+}
 bool IRrecv::printIRResultShort(Print *aSerial, bool aCheckForRecordGapsMicros) {
 // call no class function with same name
     ::printIRResultShort(aSerial, &decodedIRData);

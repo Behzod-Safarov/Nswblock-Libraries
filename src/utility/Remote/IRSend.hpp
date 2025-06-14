@@ -8,7 +8,7 @@
  ************************************************************************************
  * MIT License
  *
- * Copyright (c) 2009-2023 Ken Shirriff, Rafi Khan, Armin Joachimsmeyer
+ * Copyright (c) 2009-2025 Ken Shirriff, Rafi Khan, Armin Joachimsmeyer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +69,7 @@ IRsend::IRsend() { // @suppress("Class members should be properly initialized")
     sendPin = 0;
 #endif
 
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_SEND_FEEDBACK_CODE)
     setLEDFeedback(0, DO_NOT_ENABLE_LED_FEEDBACK);
 #endif
 }
@@ -80,7 +80,7 @@ IRsend::IRsend() { // @suppress("Class members should be properly initialized")
  * Simple start with defaults - LED feedback enabled! Used if IR_SEND_PIN is defined. Saves program memory.
  */
 void IRsend::begin(){
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     setLEDFeedback(USE_DEFAULT_FEEDBACK_LED_PIN, LED_FEEDBACK_ENABLED_FOR_SEND);
 #  endif
 #if defined(_IR_MEASURE_TIMING) && defined(_IR_TIMING_TEST_PIN)
@@ -94,7 +94,7 @@ void IRsend::begin(){
  * @param aFeedbackLEDPin       If 0 / USE_DEFAULT_FEEDBACK_LED_PIN, then take board specific FEEDBACK_LED_ON() and FEEDBACK_LED_OFF() functions
  */
 void IRsend::begin(bool aEnableLEDFeedback, uint_fast8_t aFeedbackLEDPin) {
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_SEND_FEEDBACK_CODE)
     uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if(aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_SEND;
@@ -109,7 +109,7 @@ void IRsend::begin(bool aEnableLEDFeedback, uint_fast8_t aFeedbackLEDPin) {
 #else // defined(IR_SEND_PIN)
 IRsend::IRsend(uint_fast8_t aSendPin) { // @suppress("Class members should be properly initialized")
     sendPin = aSendPin;
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     setLEDFeedback(0, DO_NOT_ENABLE_LED_FEEDBACK);
 #  endif
 }
@@ -120,7 +120,7 @@ IRsend::IRsend(uint_fast8_t aSendPin) { // @suppress("Class members should be pr
  */
 void IRsend::begin(uint_fast8_t aSendPin) {
     sendPin = aSendPin;
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     setLEDFeedback(USE_DEFAULT_FEEDBACK_LED_PIN, LED_FEEDBACK_ENABLED_FOR_SEND);
 #  endif
 }
@@ -142,7 +142,7 @@ void IRsend::begin(uint_fast8_t aSendPin, bool aEnableLEDFeedback, uint_fast8_t 
     sendPin = aSendPin;
 #endif
 
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_SEND_FEEDBACK_CODE)
     uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if (aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_SEND;
@@ -611,10 +611,10 @@ void IRsend::sendPulseDistanceWidthFromPGMArray(uint_fast8_t aFrequencyKHz, uint
 #if defined(LOCAL_DEBUG)
     // fist data
     Serial.print(F("Data[0]=0x"));
-    Serial.print(aDecodedRawDataArray[0], HEX);
+    Serial.print(aDecodedRawDataPGMArray[0], HEX);
     if (tNumberOf32Or64BitChunks > 1) {
         Serial.print(F(" Data[1]=0x"));
-        Serial.print(aDecodedRawDataArray[1], HEX);
+        Serial.print(aDecodedRawDataPGMArray[1], HEX);
     }
     Serial.print(F(" #="));
     Serial.println(aNumberOfBits);
@@ -798,10 +798,10 @@ void IRsend::sendPulseDistanceWidthFromPGMArray(PulseDistanceWidthProtocolConsta
 #if defined(LOCAL_DEBUG)
     // fist data
     Serial.print(F("Data[0]=0x"));
-    Serial.print(aDecodedRawDataArray[0], HEX);
+    Serial.print(aDecodedRawDataPGMArray[0], HEX);
     if (tNumberOf32Or64BitChunks > 1) {
         Serial.print(F(" Data[1]=0x"));
-        Serial.print(aDecodedRawDataArray[1], HEX);
+        Serial.print(aDecodedRawDataPGMArray[1], HEX);
     }
     Serial.print(F(" #="));
     Serial.println(aNumberOfBits);
@@ -1142,7 +1142,7 @@ void IRsend::sendBiphaseData(uint16_t aBiphaseTimeUnit, uint32_t aData, uint_fas
 void IRsend::mark(uint16_t aMarkMicros) {
 
 #if defined(SEND_PWM_BY_TIMER) || defined(USE_NO_SEND_PWM)
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     if (FeedbackLEDControl.LedFeedbackEnabled == LED_FEEDBACK_ENABLED_FOR_SEND) {
         setFeedbackLED(true);
     }
@@ -1165,7 +1165,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
 #  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) && !defined(OUTPUT_OPEN_DRAIN)
     // Here we have no hardware supported Open Drain outputs, so we must mimicking it
     pinModeFast(sendPin, OUTPUT); // active state for mimicking open drain
-#  elif defined(USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN)
+#  elif defined(USE_ACTIVE_HIGH_OUTPUT_FOR_NO_SEND_PWM) || defined(USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN) // USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN is old and deprecated
     digitalWriteFast(sendPin, HIGH); // Set output to active high.
 #  else
     digitalWriteFast(sendPin, LOW); // Set output to active low.
@@ -1173,7 +1173,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
 
     customDelayMicroseconds(aMarkMicros);
     IRLedOff();
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     if (FeedbackLEDControl.LedFeedbackEnabled == LED_FEEDBACK_ENABLED_FOR_SEND) {
         setFeedbackLED(false);
     }
@@ -1187,41 +1187,58 @@ void IRsend::mark(uint16_t aMarkMicros) {
     unsigned long tStartMicros = micros();
     unsigned long tNextPeriodEnding = tStartMicros;
     unsigned long tMicros;
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
     bool FeedbackLedIsActive = false;
 #  endif
 
     do {
 //        digitalToggleFast(_IR_TIMING_TEST_PIN);
         /*
-         * Output the PWM pulse
+         * Output the PWM pulse - IR LED is active
          */
         noInterrupts(); // do not let interrupts extend the short on period
-#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN)
-#    if defined(OUTPUT_OPEN_DRAIN)
-        digitalWriteFast(sendPin, LOW); // set output with pin mode OUTPUT_OPEN_DRAIN to active low
+#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) || defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN)
+#    if defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN) || defined(OUTPUT_OPEN_DRAIN)
+        if (__builtin_constant_p(sendPin)) {
+            digitalWriteFast(sendPin, LOW); // set output to active low. Also applicable for pin with mode OUTPUT_OPEN_DRAIN :-)
+        } else {
+            digitalWrite(sendPin, LOW);
+        }
 #    else
         pinModeFast(sendPin, OUTPUT); // active state for mimicking open drain
 #    endif
 #  else
         // 3.5 us from FeedbackLed on to pin setting. 5.7 us from call of mark() to pin setting incl. setting of feedback pin.
         // 4.3 us from do{ to pin setting if sendPin is no constant
-        digitalWriteFast(sendPin, HIGH);
+        // check must be here because of MegaTinyCore and its badArg() check
+        if (__builtin_constant_p(sendPin)) {
+            digitalWriteFast(sendPin, HIGH);
+        } else {
+            digitalWrite(sendPin, HIGH);
+        }
 #  endif
         delayMicroseconds (periodOnTimeMicros); // On time is 8 us for 30% duty cycle. This is normally implemented by a blocking wait.
 
         /*
-         * Output the PWM pause
+         * Output the PWM pause - IR LED is inactive
          */
-#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) && !defined(OUTPUT_OPEN_DRAIN)
-#    if defined(OUTPUT_OPEN_DRAIN)
-        digitalWriteFast(sendPin, HIGH); // Set output with pin mode OUTPUT_OPEN_DRAIN to inactive high.
+#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) || defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN)
+#    if defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN) || defined(OUTPUT_OPEN_DRAIN)
+        if (__builtin_constant_p(sendPin)) {
+            digitalWriteFast(sendPin, HIGH);  // Set output to inactive high. Also applicable for pin with mode OUTPUT_OPEN_DRAIN
+        } else {
+            digitalWrite(sendPin, HIGH);
+        }
 #    else
         pinModeFast(sendPin, INPUT); // to mimic the open drain inactive state
 #    endif
 
 #  else
-        digitalWriteFast(sendPin, LOW);
+        if (__builtin_constant_p(sendPin)) {
+            digitalWriteFast(sendPin, LOW);
+        } else {
+            digitalWrite(sendPin, LOW);
+        }
 #  endif
         /*
          * Enable interrupts at start of the longer off period. Required at least to keep micros correct.
@@ -1229,7 +1246,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
          */
         interrupts();
 
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
         /*
          * Delayed call of setFeedbackLED() to get better startup timing, especially required for consecutive marks
          */
@@ -1244,8 +1261,8 @@ void IRsend::mark(uint16_t aMarkMicros) {
          * PWM pause timing
          * Measured delta between pause duration values are 13 us for a 16 MHz Uno (from 13 to 26), if interrupts are disabled below
          * Measured delta between pause duration values are 20 us for a 16 MHz Uno (from 7.8 to 28), if interrupts are not disabled below
-         * Minimal pause duration is 5.2 us with NO_LED_FEEDBACK_CODE enabled
-         * and 8.1 us with NO_LED_FEEDBACK_CODE disabled.
+         * Minimal pause duration is 5.2 us with NO_LED_SEND_FEEDBACK_CODE enabled
+         * and 8.1 us with NO_LED_SEND_FEEDBACK_CODE disabled.
          */
         tNextPeriodEnding += periodTimeMicros;
 #if defined(__AVR__) // micros() for STM sometimes give decreasing values if interrupts are disabled. See https://github.com/stm32duino/Arduino_Core_STM32/issues/1680
@@ -1259,8 +1276,8 @@ void IRsend::mark(uint16_t aMarkMicros) {
              * For AVR @16MHz we have only 4 us resolution.
              * The duration of the micros() call itself is 3 us.
              * It takes 0.9 us from signal going low here.
-             * The rest of the loop takes 1.2 us with NO_LED_FEEDBACK_CODE enabled
-             * and 3 us with NO_LED_FEEDBACK_CODE disabled.
+             * The rest of the loop takes 1.2 us with NO_LED_SEND_FEEDBACK_CODE enabled
+             * and 3 us with NO_LED_SEND_FEEDBACK_CODE disabled.
              */
 #if defined(_IR_MEASURE_TIMING) && defined(_IR_TIMING_TEST_PIN)
             digitalWriteFast(_IR_TIMING_TEST_PIN, LOW); // 2 clock cycles
@@ -1273,7 +1290,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
 #if defined(__AVR__)
             // reset feedback led in the last pause before end
 //            tDeltaMicros += (160 / CLOCKS_PER_MICRO); // adding this once increases program size, so do it below !
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
             if (tDeltaMicros >= aMarkMicros - (30 + (112 / CLOCKS_PER_MICRO))) { // 30 to be constant. Using periodTimeMicros increases program size too much.
                 if (FeedbackLEDControl.LedFeedbackEnabled & LED_FEEDBACK_ENABLED_FOR_SEND) {
                     setFeedbackLED(false);
@@ -1284,7 +1301,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
             if (tDeltaMicros >= aMarkMicros - (112 / CLOCKS_PER_MICRO)) { // To compensate for call duration - 112 is an empirical value
 #else
             if (tDeltaMicros >= aMarkMicros) {
-#  if !defined(NO_LED_FEEDBACK_CODE)
+#  if !defined(NO_LED_SEND_FEEDBACK_CODE)
                 if (FeedbackLEDControl.LedFeedbackEnabled == LED_FEEDBACK_ENABLED_FOR_SEND) {
                     setFeedbackLED(false);
                 }
@@ -1312,24 +1329,32 @@ void IRsend::IRLedOff() {
 #  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) && !defined(OUTPUT_OPEN_DRAIN)
     digitalWriteFast(sendPin, LOW); // prepare for all next active states.
     pinModeFast(sendPin, INPUT);// inactive state for open drain
-#  elif defined(USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN)
+#  elif defined(USE_ACTIVE_HIGH_OUTPUT_FOR_NO_SEND_PWM) || defined(USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN) // USE_ACTIVE_HIGH_OUTPUT_FOR_SEND_PIN is old and deprecated
     digitalWriteFast(sendPin, LOW); // Set output to inactive low.
 #  else
     digitalWriteFast(sendPin, HIGH); // Set output to inactive high.
 #  endif
 #else
-#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN)
-#    if defined(OUTPUT_OPEN_DRAIN)
-    digitalWriteFast(sendPin, HIGH); // Set output to inactive high.
+#  if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) || defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN)
+#    if defined(USE_ACTIVE_LOW_OUTPUT_FOR_SEND_PIN) || defined(OUTPUT_OPEN_DRAIN)
+    if (__builtin_constant_p(sendPin)) {
+        digitalWriteFast(sendPin, HIGH); // set output to inactive high.
+    } else {
+        digitalWrite(sendPin, HIGH);
+    }
 #    else
     pinModeFast(sendPin, INPUT); // inactive state to mimic open drain
 #    endif
 #  else
-    digitalWriteFast(sendPin, LOW);
+    if (__builtin_constant_p(sendPin)) {
+        digitalWriteFast(sendPin, LOW); // set output to active low.
+    } else {
+        digitalWrite(sendPin, LOW);
+    }
 #  endif
 #endif
 
-#if !defined(NO_LED_FEEDBACK_CODE)
+#if !defined(NO_LED_SEND_FEEDBACK_CODE)
     if (FeedbackLEDControl.LedFeedbackEnabled & LED_FEEDBACK_ENABLED_FOR_SEND) {
         setFeedbackLED(false);
     }
@@ -1378,7 +1403,7 @@ void IRsend::customDelayMicroseconds(unsigned long aMicroseconds) {
  * Enables IR output. The kHz value controls the modulation frequency in kilohertz.
  * IF PWM should be generated by a timer, it uses the platform specific timerConfigForSend() function,
  * otherwise it computes the delays used by the mark() function.
- * If IR_SEND_PIN is defined, maximum PWM frequency for an AVR @16 MHz is 170 kHz (180 kHz if NO_LED_FEEDBACK_CODE is defined)
+ * If IR_SEND_PIN is defined, maximum PWM frequency for an AVR @16 MHz is 170 kHz (180 kHz if NO_LED_SEND_FEEDBACK_CODE is defined)
  */
 void IRsend::enableIROut(uint_fast8_t aFrequencyKHz) {
 #if defined(SEND_PWM_BY_TIMER)
@@ -1411,7 +1436,11 @@ void IRsend::enableIROut(uint_fast8_t aFrequencyKHz) {
 #    if defined(IR_SEND_PIN)
     pinModeFast(IR_SEND_PIN, OUTPUT);
 #    else
-    pinModeFast(sendPin, OUTPUT);
+    if (__builtin_constant_p(sendPin)) {
+        pinModeFast(sendPin, OUTPUT);
+    } else {
+        pinMode(sendPin, OUTPUT);
+    }
 #    endif
 #  endif
 #endif // defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN)

@@ -1,10 +1,11 @@
-#include <NswFourButton.h>  // NswBlock uchun 4-tugmali modul kutubxonasi chaqirilmoqda
+#include <Nsw4Button.h>  // NswBlock uchun 4-tugmali modul kutubxonasi chaqirilmoqda
 
+// Bu modul faqatgina analog portlarga(qora rangli) ulana oladi
 // 📌 To‘rtta tugmali modulni yaratamiz va PORT_3 ga ulaymiz (PORT_3 = A2, A3)
-NswFourButton buttons(PORT_3);
+NswFourButton buttons(PORT_1);
 
 void setup() {
-    Serial.begin(115200);  // 📌 Seriyali monitorni 115200 baud tezlikda ishga tushiramiz
+    Serial.begin(9600);  // 📌 Seriyali monitorni 115200 baud tezlikda ishga tushiramiz
     Serial.println("4-Tugmali modul test boshlandi...");  
     Serial.println("Tugmalardan birini bosing, natijani ko‘rish mumkin.");
 }

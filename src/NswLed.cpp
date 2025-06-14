@@ -2,7 +2,7 @@
 
 // Constructor: Initialize LED with Port enum
 NswLed::NswLed(Port port) {
-    ledPin = NswPort(port).pin2; // Use pin1 as LED pin
+    ledPin = NswPort(port).pin1; // Use pin1 as LED pin
     pinMode(ledPin, OUTPUT);
     state = LOW;
 }

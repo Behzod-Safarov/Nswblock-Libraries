@@ -1,4 +1,4 @@
-#include "NswFourButton.h"
+#include "Nsw4Button.h"
 #include <Arduino.h>
 
 NswFourButton::NswFourButton(const NswPort &port) {
